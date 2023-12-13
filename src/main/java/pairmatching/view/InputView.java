@@ -6,4 +6,9 @@ public class InputView {
     public String read() {
         return Console.readLine();
     }
+
+    public String readAndNotify(String s) {
+        System.out.println(s);
+        return Console.readLine();
+    }
 }

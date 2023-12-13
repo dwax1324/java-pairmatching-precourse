@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import pairmatching.domain.MatchingComputer;
+import pairmatching.domain.Mission;
 import pairmatching.utils.Parser;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
@@ -25,7 +26,6 @@ public class Controller {
         List<String> backendCrews = setTestData("src/main/resources/backend-crew.md");
         List<String> frontendCrews = setTestData("src/main/resources/frontend-crew.md");
         matchingComputer = new MatchingComputer(frontendCrews, backendCrews);
-        outputView.printMainScreen();
         try {
             handleCommand();
         } catch (IllegalArgumentException e) {
@@ -34,6 +34,7 @@ public class Controller {
     }
 
     private void handleCommand() {
+        outputView.printMainScreen();
         String input = inputView.read();
         if (input.equals("Q")) {
             return;
@@ -47,20 +48,21 @@ public class Controller {
         if (input.equals("3")) {
 //            matchingSubControl();
         }
+        handleCommand();
     }
 
     private void matchingSubControl() {
         outputView.printMatchingScreen();
         String input = inputView.readAndNotify("과정, 레벨, 미션을 선택하세요.\n"
                 + "ex) 백엔드, 레벨1, 자동차경주\n");
-        List<String> s = Parser.parseStringByDelimiter(input, ",");
+        List<String> parsed = Parser.parseStringByDelimiter(input, ",");
 
-        if (matchingComputer.hasMission(s.get(2)) && !rematch()) {
+        if (matchingComputer.hasMission(new Mission(parsed.get(0), parsed.get(1), parsed.get(2))) && !rematch()) {
             return;
         }
-        matchingComputer.setM
-    ission(input);
-        outputView.printMatchingResult();
+        matchingComputer.addMission(input);
+        List<List<String>> dto = matchingComputer.toDto(parsed.get(0), parsed.get(1), parsed.get(2));
+        outputView.printMatchingResult(dto);
     }
 
     private boolean rematch() {
@@ -71,6 +73,7 @@ public class Controller {
         if (input.equals(YES)) {
             return true;
         }
+        return false;
     }
 
     private List<String> setTestData(String filePath) {

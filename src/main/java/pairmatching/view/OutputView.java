@@ -1,5 +1,7 @@
 package pairmatching.view;
 
+import java.util.List;
+
 public class OutputView {
     public void printMainScreen() {
         System.out.println("기능을 선택하세요.\n"
@@ -21,6 +23,11 @@ public class OutputView {
                 + "############################################\n");
     }
 
-    public void printMatchingResult() {
+    public void printMatchingResult(List<List<String>> dto) {
+        System.out.println("!!!!!!");
+        for (List<String> pair : dto) {
+            System.out.println(pair.get(0) + " " + pair.get(1));
+        }
+
     }
 }

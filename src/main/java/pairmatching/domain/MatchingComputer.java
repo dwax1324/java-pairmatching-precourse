@@ -13,11 +13,17 @@ public class MatchingComputer {
         backendCrews = b;
     }
 
-    public boolean hasMission(String mission) {
+
+    public boolean hasMission(Mission mission) {
         return missions.has(mission);
     }
 
-    public void setMission(String input) {
+    public void addMission(String input) {
         missions.add(input);
+    }
+
+    public List<List<String>> toDto(String course, String level, String missionName) {
+        Mission mission = missions.get(new Mission(course, level, missionName));
+        return mission.getPairs();
     }
 }
